@@ -1,0 +1,27 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Permitir acesso às coleções principais
+    match /atletas/{document} {
+      allow read, write: if true;
+    }
+    
+    match /quartos/{document} {
+      allow read, write: if true;
+    }
+    
+    match /autorizacoes_tipos/{document} {
+      allow read, write: if true;
+    }
+    
+    match /usuario/{document} {
+      allow read, write: if true;
+    }
+    
+    // Regra padrão para outras coleções
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
+
