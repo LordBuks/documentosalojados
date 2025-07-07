@@ -6,6 +6,17 @@
   <title>Sistema de Cadastro de Autorizações - SC Internacional</title>
   <link rel="stylesheet" href="css/styles.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { firebaseConfig } from "./firebase-config.js";
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.db = db; // Expose db to global scope for easier access in inline scripts
+  </script>
 </head>
 <body>
   <header class="header">
@@ -229,40 +240,37 @@
     let atletas = {};
 
     // Função para criar/carregar um quarto
-    function criarQuarto() {
-      const numeroQuarto = document.getElementById('numeroQuarto').value;
+    async function criarQuarto() {
+      const numeroQuarto = document.getElementById("numeroQuarto").value;
       
       if (!numeroQuarto) {
-        alert('Por favor, insira o número do quarto.');
+        alert("Por favor, insira o número do quarto.");
         return;
       }
 
       quartoAtual = numeroQuarto;
       
-      // Carregar dados existentes ou criar novo quarto
-      const dadosSalvos = localStorage.getItem('autorizacoes_sistema_melhorado');
-      if (dadosSalvos) {
-        try {
-          atletas = JSON.parse(dadosSalvos);
-        } catch (e) {
-          console.error('Erro ao carregar dados salvos:', e);
-          atletas = {};
-        }
-      }
+      // Carregar dados existentes ou criar novo quarto do Firestore
+      const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+      const quartoRef = doc(db, "quartos", quartoAtual);
+      const docSnap = await getDoc(quartoRef);
 
-      if (!atletas[quartoAtual]) {
+      if (docSnap.exists()) {
+        atletas[quartoAtual] = docSnap.data().atletas;
+      } else {
         atletas[quartoAtual] = [];
         // Criar 3 atletas vazios para o quarto
         for (let i = 1; i <= 3; i++) {
           atletas[quartoAtual].push({
             id: `${quartoAtual}_${i}`,
-            nome: '',
-            categoria: '',
+            nome: "",
+            categoria: "",
             quarto: quartoAtual,
             posicao: i,
             autorizacoes: {}
           });
         }
+        await salvarDados(); // Salvar o novo quarto no Firestore
       }
 
       renderizarAtletas();
@@ -436,36 +444,49 @@
       }
     }
 
-    // Função para salvar dados no localStorage
-    function salvarDados() {
+    // Função para salvar dados no Firestore
+    async function salvarDados() {
+      if (!quartoAtual) return;
       try {
-        localStorage.setItem('autorizacoes_sistema_melhorado', JSON.stringify(atletas));
+        const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+        const quartoRef = doc(db, "quartos", quartoAtual);
+        await setDoc(quartoRef, { atletas: atletas[quartoAtual] });
+        console.log("Dados salvos com sucesso no Firestore!");
       } catch (e) {
-        console.error('Erro ao salvar dados:', e);
-        alert('Erro ao salvar dados. Verifique o espaço disponível no navegador.');
+        console.error("Erro ao salvar dados no Firestore:", e);
+        alert("Erro ao salvar dados. Verifique a conexão com o Firebase.");
       }
     }
 
     // Função para salvar todos os atletas
-    function salvarTodos() {
+    async function salvarTodos() {
       if (!quartoAtual || !atletas[quartoAtual]) {
-        alert('Nenhum quarto carregado para salvar.');
+        alert("Nenhum quarto carregado para salvar.");
         return;
       }
       
-      salvarDados();
-      alert('Dados salvos com sucesso!');
+      await salvarDados();
+      alert("Dados salvos com sucesso!");
     }
 
     // Função para limpar tudo
-    function limparTudo() {
-      if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
-        localStorage.removeItem('autorizacoes_sistema_melhorado');
+    async function limparTudo() {
+      if (confirm("Tem certeza que deseja limpar todos os dados do quarto atual? Esta ação não pode ser desfeita.")) {
+        if (quartoAtual) {
+          try {
+            const { doc, deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+            await deleteDoc(doc(db, "quartos", quartoAtual));
+            console.log("Dados do quarto atual removidos do Firestore!");
+          } catch (e) {
+            console.error("Erro ao remover dados do Firestore:", e);
+            alert("Erro ao remover dados do Firestore.");
+          }
+        }
         atletas = {};
         quartoAtual = null;
-        document.getElementById('numeroQuarto').value = '';
-        document.getElementById('atletasContainer').innerHTML = '';
-        alert('Todos os dados foram limpos!');
+        document.getElementById("numeroQuarto").value = "";
+        document.getElementById("atletasContainer").innerHTML = "";
+        alert("Todos os dados do quarto atual foram limpos!");
       }
     }
 
