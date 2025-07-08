@@ -54,7 +54,7 @@
     // Verificar se o usuário já está logado
     onAuthStateChanged(auth, (user) => {
       if (user && user.email === "servicosocial@inter.com") {
-        window.location.href = "index.html";
+        window.location.href = "dashboard.html";
       }
     });
 
@@ -82,7 +82,7 @@
         // Verificar se é o usuário autorizado
         if (email === "servicosocial@inter.com") {
           // Sucesso - redirecionar para a página principal
-          window.location.href = "index.html";
+          window.location.href = "dashboard.html";
         } else {
           errorMessageDiv.textContent = "Usuário não autorizado para este sistema.";
           errorMessageDiv.style.display = "block";
