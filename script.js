@@ -7,12 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await initAuth();
   requireAuth();
   
-  // Configurar área do usuário no cabeçalho
-  const headerUserArea = document.getElementById('headerUserArea');
-  if (headerUserArea) {
-    showUserInfo(headerUserArea);
-    createLogoutButton(headerUserArea);
-  }
+
 });
 
 // Categorias disponíveis
@@ -410,21 +405,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   // Verificar se o usuário está autenticado
   requireAuth();
   
-  // Criar elementos de interface do usuário
-  const header = document.querySelector('.header');
-  if (header) {
-    const userContainer = document.createElement('div');
-    userContainer.style.cssText = `
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      margin-left: auto;
-    `;
-    
-    showUserInfo(userContainer);
-    createLogoutButton(userContainer);
-    header.appendChild(userContainer);
-  }
+
   
   document.getElementById('btnCriarQuarto').addEventListener('click', criarQuarto);
   document.getElementById('btnSalvarTodos').addEventListener('click', salvarTodos);
@@ -438,4 +419,19 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
   });
 });
+
+
+
+  // Adicionar elementos de usuário e logout ao cabeçalho
+  onAuthChange(user => {
+    const headerUserArea = document.getElementById('headerUserArea');
+    if (headerUserArea) {
+      headerUserArea.innerHTML = ''; // Limpar conteúdo existente
+      if (user) {
+        showUserInfo(headerUserArea);
+        createLogoutButton(headerUserArea);
+      }
+    }
+  });
+
 
