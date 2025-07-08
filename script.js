@@ -1,5 +1,6 @@
 import { db } from "./firebase-init.js";
 import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initAuth, requireAuth, createLogoutButton, showUserInfo, onAuthChange } from "./auth.js";
 
 // Categorias disponíveis
 const categorias = ['Sub-14', 'Sub-15', 'Sub-16', 'Sub-17', 'Sub-20'];
@@ -389,7 +390,29 @@ window.atualizarAtleta = atualizarAtleta;
 window.atualizarAutorizacao = atualizarAutorizacao;
 
 // Event listeners para os botões
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+  // Inicializar autenticação
+  await initAuth();
+  
+  // Verificar se o usuário está autenticado
+  requireAuth();
+  
+  // Criar elementos de interface do usuário
+  const header = document.querySelector('.header');
+  if (header) {
+    const userContainer = document.createElement('div');
+    userContainer.style.cssText = `
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-left: auto;
+    `;
+    
+    showUserInfo(userContainer);
+    createLogoutButton(userContainer);
+    header.appendChild(userContainer);
+  }
+  
   document.getElementById('btnCriarQuarto').addEventListener('click', criarQuarto);
   document.getElementById('btnSalvarTodos').addEventListener('click', salvarTodos);
   document.getElementById('btnLimparTudo').addEventListener('click', limparTudo);

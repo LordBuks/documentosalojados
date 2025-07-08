@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Controle de Autorizações - Login</title>
+  <link rel="stylesheet" href="css/login-styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="logo-section">
+        <img src="https://i.imgur.com/odzcc03.png" alt="Logo SC Internacional" class="logo">
+        <h1 class="system-title">Sistema de Controle de Autorizações</h1>
+      </div>
+      
+      <div class="login-form-section">
+        <h2 class="login-title">Login</h2>
+        <form id="loginForm" class="login-form">
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="email@inter.com" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" name="senha" placeholder="••••••••" required>
+          </div>
+          
+          <button type="submit" class="login-btn">
+            <span id="loginBtnText">Entrar</span>
+            <i id="loginSpinner" class="fas fa-spinner fa-spin" style="display: none;"></i>
+          </button>
+          <div id="errorMessage" class="error-message" style="display: none;"></div>
+        </form>
+        <div class="social-service-block">
+          <img src="https://imgur.com/HIsH9X5.png" alt="Logo Serviço Social" class="footer-social-logo">
+          <p>Gerenciamento de Autorizações das Categorias de Base</p>
+          <p>Departamento de Serviço Social</p>
+        </div>
+      </div>
+    </div>
+    
+    <footer class="login-footer">
+      <p>© 2025 VampTech Ltda. Todos os direitos reservados.</p>
+    </footer>
+  </div>
+
+  <script type="module">
+    import { auth } from './firebase-init.js';
+    import { signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    // Verificar se o usuário já está logado
+    onAuthStateChanged(auth, (user) => {
+      if (user && user.email === "servicosocial@inter.com") {
+        window.location.href = "index.html";
+      }
+    });
+
+    document.getElementById("loginForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById("email").value;
+      const senha = document.getElementById("senha").value;
+      const errorMessageDiv = document.getElementById("errorMessage");
+      const loginBtn = document.querySelector(".login-btn");
+      const loginBtnText = document.getElementById("loginBtnText");
+      const loginSpinner = document.getElementById("loginSpinner");
+
+      // Mostrar loading
+      loginBtn.disabled = true;
+      loginBtnText.style.display = "none";
+      loginSpinner.style.display = "inline-block";
+      errorMessageDiv.style.display = "none";
+      errorMessageDiv.textContent = "";
+      
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, senha);
+        const user = userCredential.user;
+        
+        // Verificar se é o usuário autorizado
+        if (email === "servicosocial@inter.com") {
+          // Sucesso - redirecionar para a página principal
+          window.location.href = "index.html";
+        } else {
+          errorMessageDiv.textContent = "Usuário não autorizado para este sistema.";
+          errorMessageDiv.style.display = "block";
+          await auth.signOut();
+        }
+      } catch (error) {
+        console.error("Erro no login:", error);
+        let message = "Erro desconhecido. Tente novamente.";
+        switch (error.code) {
+          case 'auth/invalid-email':
+            message = "Email inválido.";
+            break;
+          case 'auth/user-disabled':
+            message = "Usuário desativado.";
+            break;
+          case 'auth/user-not-found':
+          case 'auth/wrong-password':
+            message = "Email ou senha incorretos.";
+            break;
+          case 'auth/invalid-credential':
+            message = "Credenciais inválidas. Verifique seu email e senha.";
+            break;
+          case 'auth/too-many-requests':
+            message = "Muitas tentativas de login. Tente novamente mais tarde.";
+            break;
+          default:
+            message = "Erro no login: " + error.message;
+        }
+        errorMessageDiv.textContent = message;
+        errorMessageDiv.style.display = "block";
+      } finally {
+        // Esconder loading
+        loginBtn.disabled = false;
+        loginBtnText.style.display = "inline";
+        loginSpinner.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>
+
