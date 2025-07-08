@@ -43,15 +43,14 @@
 
     .btn {
       display: inline-block;
-      padding: 12px 24px;
+      padding: 10px 15px;
       text-align: center;
       text-decoration: none;
       border-radius: 8px;
-      font-weight: 600;
+      font-weight: 300px;
       white-space: nowrap;
       box-sizing: border-box;
-      margin: 8px 5px;
-      cursor: pointer;
+      margin: 8px 5px;11:09 08/07/2025      cursor: pointer;
       border: none;
       font-size: 1rem;
       transition: all 0.3s ease;
@@ -89,8 +88,8 @@
 
     .form-row select,
     .form-row input {
-      flex: 1;
-      padding: 12px;
+      
+      padding: 10px;
       border: 2px solid #e9ecef;
       border-radius: 8px;
       font-size: 1rem;
@@ -408,17 +407,19 @@
       background: white;
       border-radius: 16px;
       padding: 30px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      box-shadow: 9px 10px 30px rgba(0,2,2,0.2);
       margin-bottom: 30px;
     }
 
     .card-title {
       color: #dc3545;
-      font-size: 1.6rem;
-      font-weight: 700;
+      font-size: 1.8rem;
+      font-weight: 800;
       margin-bottom: 20px;
       text-align: center;
-    }
+      text-shadow: 2px 2px px rgba(0, 0, 0, 0.2); /* Sombra preta com 30% de opacidade */
+}
+    
 
     body {
       background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -427,33 +428,38 @@
     }
 
     .container {
+      border-radius: 6px 6px 6px 6;
       max-width: 1000px;
-      margin: 0 auto;
-      padding: 20px;
+      margin:  auto;
+      padding: 2px;
+      box-shadow: 10px;
+    
+
     }
 
     .header {
       background: linear-gradient(135deg, #ffffff, #ffffff);
       color: #c82b2b;
-      padding: 35px 0;
+      padding: 60px 0;
       text-align: center;
-      margin-bottom: 35px;
-      border-radius: 0 0 10px 10px;
-      box-shadow: 0 10px 30px rgba(56, 43, 44, 0.444);
+      margin-bottom: 25px;
+      border-radius: 10px 10px 10px 10px;
+      box-shadow: 8px 10px 30px rgba(56, 43, 44, 0.444);
       max-width: 1000px;
       margin: 0 auto 35px auto;
     }
 
-    .header-logo {
-      height: 80px;
-      margin-bottom: 15px;
-    }
+   .header-logo {
+    height: 95px;
+    margin-bottom: 10px;
+    filter: drop-shadow(2px 2px 3px rgba(0, 0, 0.1, 0.2));
+}
 
     .header-title {
       font-size: 2.2rem;
       font-weight: 620;
       margin: 0;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      text-shadow: 2px 2px 3px rgba(0,0,0,0.3);
     }
 
     /* Responsividade */
@@ -484,6 +490,7 @@
 .teoria-card p {
   text-align: justify;
   text-justify: inter-word;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1); 
 }
 
 .teoria-card li {

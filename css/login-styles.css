@@ -219,7 +219,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 20px;10:11 08/07/2025
   background: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
@@ -245,7 +245,7 @@ body {
   top: 10px;
   right: 20px;
   display: flex;
-  align-items: center;
+  align-items: center;10:13 08/07/2025
   gap: 15px;
 }
 
