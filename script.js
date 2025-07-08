@@ -2,6 +2,19 @@ import { db } from "./firebase-init.js";
 import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { initAuth, requireAuth, createLogoutButton, showUserInfo, onAuthChange } from "./auth.js";
 
+// Inicializar autenticação e área do usuário
+document.addEventListener('DOMContentLoaded', async () => {
+  await initAuth();
+  requireAuth();
+  
+  // Configurar área do usuário no cabeçalho
+  const headerUserArea = document.getElementById('headerUserArea');
+  if (headerUserArea) {
+    showUserInfo(headerUserArea);
+    createLogoutButton(headerUserArea);
+  }
+});
+
 // Categorias disponíveis
 const categorias = ['Sub-14', 'Sub-15', 'Sub-16', 'Sub-17', 'Sub-20'];
 
