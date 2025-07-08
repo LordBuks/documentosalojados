@@ -117,7 +117,8 @@ body {
 
 .login-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4);
+  box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4); /* Sombra verde */
+  background: linear-gradient(135deg, #28a745, #218838); /* Gradiente verde */
 }
 
 .login-btn:active {
@@ -208,5 +209,132 @@ body {
   text-align: center;
   font-size: 0.9rem;
   font-weight: 500;
+}
+
+
+
+/* Estilos para o header com botão de logout e ícone de usuário */
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.header-logo {
+  position: absolute;
+  left: 20px;
+  height: 60px;
+}
+
+.header-title {
+  color: #dc3545;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 0;
+}
+
+/* Container para elementos do usuário no canto superior direito */
+.user-container {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Ícone do usuário no canto superior direito */
+.user-icon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #667eea;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.user-icon i {
+  font-size: 1.2rem;
+}
+
+/* Botão de logout no canto inferior direito do header */
+.logout-container {
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+}
+
+.logout-btn {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+.logout-btn:hover {
+  background: linear-gradient(135deg, #28a745, #218838); /* Verde no hover */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+}
+
+.logout-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsividade para o header */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    padding: 15px;
+    position: relative;
+  }
+  
+  .header-logo {
+    position: static;
+    margin-bottom: 10px;
+  }
+  
+  .header-title {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+  }
+  
+  .user-container {
+    position: static;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  
+  .logout-container {
+    position: static;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-title {
+    font-size: 1.2rem;
+  }
+  
+  .user-container {
+    flex-direction: column;
+    gap: 10px;
+  }
 }
 
